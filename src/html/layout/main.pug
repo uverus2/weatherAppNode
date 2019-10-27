@@ -1,0 +1,19 @@
+doctype html  
+html(lang='en') 
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    meta(http-equiv='x-ua-compatible', content='ie=edge')
+    title #{title}
+    link(rel="stylesheet", href="/css/main.css")
+  body
+      .container.py-4
+        .row
+          .col-12.text-center
+            h1 Our Weather #{path}
+      // content block
+      block content
+      script(src="/js/easeljs.min.js")
+      script(src="/js/main.js")
+      
+      

@@ -1,0 +1,22 @@
+extends layout/main
+block content
+
+    .pb-4
+        .hero
+
+    .container
+        .row
+            .col-12.mx-auto.text-center.py-2
+                if error
+                    h5 #{error}
+                else
+                    h5 Your address is #{weatherDesc}
+    .container
+        .row
+            .col-12.col-sm-7.mx-auto.text-center.py-4
+                form(action="results", method="post")
+                    .form-group.row
+                        div.col-sm-8.w-100.col-10.mx-auto.px-0.px-sm-3
+                            label(for="Enter Location")
+                            input.w-100(type="text" name="result" value=townName)
+                        button.mt-2.mt-sm-0.col-10.mx-auto.col-sm-4(type="sumbit") Check Weather 

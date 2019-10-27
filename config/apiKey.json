@@ -1,0 +1,14 @@
+{
+    "weatherApi": {
+        "key": "&APPID=653d16f4400d3d4d654c20d46e28e947",
+        "url": "http://api.openweathermap.org/data/2.5/weather?units=metric&q="
+    },
+    "geoLocation": {
+        "key": "AIzaSyDwa03OBmRhfwY5ucT3MUOe8-uJ2HOb47Y",
+        "url": "https://www.googleapis.com/geolocation/v1/geolocate?key="
+    },
+    "location": {
+        "key": "&key=AIzaSyDwa03OBmRhfwY5ucT3MUOe8-uJ2HOb47Y",
+        "url": "https://maps.googleapis.com/maps/api/geocode/json?latlng="
+    }
+}
