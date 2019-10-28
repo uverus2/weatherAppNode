@@ -19,6 +19,7 @@
         "bootstrap-scss": "^4.3.1",
         "easeljs": "^1.0.2",
         "express": "^4.17.1",
+        "nodemon": "^1.19.4",
         "pug": "^2.0.4",
         "request": "^2.88.0",
         "sass": "^1.23.0",

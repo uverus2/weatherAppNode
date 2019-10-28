@@ -10,5 +10,9 @@
     "location": {
         "key": "&key=AIzaSyDwa03OBmRhfwY5ucT3MUOe8-uJ2HOb47Y",
         "url": "https://maps.googleapis.com/maps/api/geocode/json?latlng="
+    },
+    "place": {
+        "places": "https://maps.googleapis.com/maps/api/place/textsearch/json?query=",
+        "photos": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=1000&photoreference="
     }
 }

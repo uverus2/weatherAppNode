@@ -3,6 +3,8 @@ const http = require("http");
 const https = require("https");
 const apiKey = require("./apiKey.json");
 const request = require('request');
+
+// Retrive response from forms
 const retriveResponseOfForm = (req) => {
     let body = "";
     return new Promise((resolve, reject) => {
@@ -36,6 +38,41 @@ const locateMe = (res) => {
         });
     });
 };
+
+
+// const locateMeCity = (res, city) => {
+//     const url = `${apiKey.place.places}` + `${city}` + `${apiKey.location.key}`;
+//     return new Promise((resolve, reject) => {
+//         request({
+//             url: url,
+//             method: "GET",
+//             json: true,
+//         }, (error, res, body) => {
+//             if (!error) {
+//                 resolve(res.body);
+//             } else {
+//                 reject(error);
+//             }
+//         });
+//     });
+// };
+
+// const photoOfLocation = (res, reference) => {
+//     const url = `${apiKey.place.photos}` + `${reference}` + `${apiKey.location.key}`;
+//     return new Promise((resolve, reject) => {
+//         request({
+//             url: url,
+//             method: "GET",
+//             json: true,
+//         }, (error, res, body) => {
+//             if (!error) {
+//                 resolve(res.body);
+//             } else {
+//                 reject(error);
+//             }
+//         });
+//     });
+// };
 
 const retriveCityResponse = (res, lat, lng) => {
 
@@ -75,7 +112,7 @@ const retriveCityResponse = (res, lat, lng) => {
                             }
                         }
                         const result = parsedData.results[0].address_components;
-                        const results = new cityData(result[1].long_name, result[3].long_name, result[4].long_name, result[2].long_name);
+                        const results = new cityData(result[2].long_name, result[4].long_name, result[6].long_name, result[3].long_name);
                         resolve(results);
                     });
                 } else {
@@ -96,6 +133,7 @@ const retriveCityResponse = (res, lat, lng) => {
     });
 };
 
+// Retrive response from weather API 
 const retriveAPIResponse = (res, city) => {
 
     const url = `${apiKey.weatherApi.url}` + `${city}` + `${apiKey.weatherApi.key}`;
@@ -118,6 +156,12 @@ const retriveAPIResponse = (res, city) => {
                     const results = new ApiScore(parsedData.name, parsedData.weather[0].description, parsedData.main.temp, parsedData.weather[0].main);
                     resolve(results);
                 });
+            } else if (res.statusCode === 404) {
+                errorMessage = {
+                    message: "Your location cannot be found. Try entering something else.",
+                    response: res.statusCode
+                };
+                reject(errorMessage);
             } else {
                 errorMessage = {
                     message: res.statusMessage,

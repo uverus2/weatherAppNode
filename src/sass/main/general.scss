@@ -4,7 +4,13 @@ canvas {
 
 .hero {
     width: 100vw;
-    height: 55vh;
+    height: 70vh;
     background: url("../../images/home.jpg") no-repeat fixed center;
     background-size: cover;
+}
+
+input[name='result'] {
+    border-radius: 5px;
+    padding: 5px;
+    text-align: center;
 }
