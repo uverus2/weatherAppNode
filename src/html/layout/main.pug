@@ -6,14 +6,19 @@ html(lang='en')
     meta(http-equiv='x-ua-compatible', content='ie=edge')
     title #{title}
     link(rel="stylesheet", href="/css/main.css")
-  body
+    script(src="https://kit.fontawesome.com/e7018ff68a.js", crossorigin="anonymous")
+    link(rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css")
+    body
       .container.py-4
         .row
           .col-12.text-left
             h1 Our Weather #{path}
       // content block
       block content
+      script(src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js")
       script(src="/js/easeljs.min.js")
       script(src="/js/main.js")
+      
+      
       
       

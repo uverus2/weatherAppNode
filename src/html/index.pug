@@ -1,22 +1,39 @@
 extends layout/main
 block content
 
-    .pb-4
+
+
+    .pb-3
         .hero
 
-    .container.py-2
+    .container.py-4
+        .row
+            .col-12.text-center
+                h2 Please enter the location for which you would like to check the weather and click the search icon.
+
+    .container.py-3
         .row
             .col-12.mx-auto.text-center
                 if error
                     h5 #{error}
                 else
-                    h5 Your address is #{weatherDesc}
-    .container.py-4
-        .row
-            .col-12.col-sm-7.mx-auto.text-center.py-2
+                    h5 Your current location is #{weatherDesc}
+            .col-12.col-sm-6.mx-auto.text-center.py-2
                 form(action="/results", method="post")
-                    label(for="Enter Location") Enter your location
                     .form-group.row
-                        div.col-sm-8.w-100.col-10.mx-auto.px-0.px-sm-3
-                            input.w-100(type="text" name="result" value=townName)
-                        button.mt-2.mt-sm-0.col-10.mx-auto.col-sm-4(type="sumbit") Check Weather 
+                        div.submitSection.col-12
+                            .row
+                                div.col-sm-10.w-100.col-10.mx-auto.px-0.parent
+                                    input.w-100.px-0(type="text" name="result" value=townName)
+                                button.mt-2.px-0.mt-sm-0.col-10.mx-auto.col-sm-2.submitMain(type="sumbit")
+                                    i.searchIcon.fas.fa-search  
+   
+    .container.py-5
+        .row    
+            .col-4.mx-auto
+                img.image.w-100(src="images/imageOne.jpg", alt="")
+            .col-8.mx-auto.text
+               h3 How to keep yourself 
+                    span Dry 
+               p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+               a.btn.btn-lg.btn-outline-primary.custom(href="#") Find Out more 

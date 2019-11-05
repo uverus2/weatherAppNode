@@ -4,6 +4,7 @@ const { formData } = require("../config/functions.js");
 const { apiData } = require("../config/functions.js");
 const { retriveCoordinates } = require("../config/functions.js");
 const { retriveCity } = require("../config/functions.js");
+const { getMyLatLng } = require("../config/functions.js");
 const querystring = require('querystring');
 const url = require('url');
 
@@ -13,7 +14,6 @@ router.get('/', async(req, res) => {
 
     const lat = userCoordinates.location.lat.toString();
     const lng = userCoordinates.location.lng.toString();
-
     let error = "";
     if (req.query.error) {
         error += req.query.error;
@@ -21,11 +21,12 @@ router.get('/', async(req, res) => {
 
     try {
         const response = await retriveCity(res, lat, lng);
+
         res.render('index', {
             title: 'Home',
             error: error,
             townName: response.town.toString(),
-            weatherDesc: response.fullAddress()
+            weatherDesc: response.fullAddress,
         });
         res.end();
     } catch (err) {
@@ -38,15 +39,25 @@ router.get('/', async(req, res) => {
 });
 
 router.post('/results', async(req, res) => {
-    console.log("posted")
     const storeFormData = await formData(req);
+
+
+    const userTownCoordinates = await getMyLatLng(res, storeFormData);
+    const userLatLng = userTownCoordinates.results[0].geometry.location;
+    const userCoordinates = await retriveCoordinates(res).catch(err => { console.log(err) });
+    const lat = userCoordinates.location.lat.toString();
+    const lng = userCoordinates.location.lng.toString();
     await apiData(res, storeFormData).then(response => {
         res.render('results', {
             title: 'Results',
             townName: response.name,
             weatherDesc: response.desc,
             temp: response.temperature.toFixed(0),
-            main: response.mainDesc
+            main: response.mainDesc,
+            lat: userLatLng.lat,
+            lng: userLatLng.lng,
+            currentLat: lat,
+            currentLng: lng
         });
     }).catch((err) => {
         res.statusCode = err.response;

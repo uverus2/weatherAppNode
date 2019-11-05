@@ -39,6 +39,23 @@ const locateMe = (res) => {
     });
 };
 
+const getMyLatLng = (res, city) => {
+    const url = `${apiKey.place.getCoordinates}` + `${city}` + `${apiKey.location.key}`;
+    return new Promise((resolve, reject) => {
+        request({
+            url: url,
+            method: "GET",
+            json: true,
+        }, (error, res, body) => {
+            if (!error) {
+                resolve(res.body);
+            } else {
+                reject(error);
+            }
+        });
+    });
+};
+
 
 // const locateMeCity = (res, city) => {
 //     const url = `${apiKey.place.places}` + `${city}` + `${apiKey.location.key}`;
@@ -80,17 +97,6 @@ const retriveCityResponse = (res, lat, lng) => {
     let errorMessage = {};
     return new Promise((resolve, reject) => {
 
-        // request({
-        //     url: url,
-        //     method: "GET",
-        //     json: true,
-        // }, (error, res, body) => {
-        //     if (!error) {
-        //         resolve(res.body);
-        //     } else {
-        //         reject(error);
-        //     }
-        // });
         if (lat && lng) {
             https.get(url, res => {
                 let rawData = "";
@@ -101,18 +107,13 @@ const retriveCityResponse = (res, lat, lng) => {
                     res.on('end', function() {
                         const parsedData = JSON.parse(rawData);
                         class cityData {
-                            constructor(town, country, postcode, postalCity) {
+                            constructor(town, fullAddress) {
                                 this.town = town.charAt(0).toUpperCase() + town.slice(1);
-                                this.country = country.charAt(0).toUpperCase() + country.slice(1);
-                                this.postcode = postcode;
-                                this.postalCity = postalCity.charAt(0).toUpperCase() + postalCity.slice(1);
-                            }
-                            fullAddress() {
-                                return `${this.town}, ${this.postalCity}, ${this.postcode}, ${this.country}`;
+                                this.fullAddress = fullAddress
                             }
                         }
-                        const result = parsedData.results[0].address_components;
-                        const results = new cityData(result[2].long_name, result[4].long_name, result[6].long_name, result[3].long_name);
+                        const townName = parsedData.plus_code.compound_code.split(" ")[1].split(",")[0];
+                        const results = new cityData(townName, parsedData.results[0].formatted_address);
                         resolve(results);
                     });
                 } else {
@@ -180,5 +181,6 @@ module.exports = {
     formData: retriveResponseOfForm,
     apiData: retriveAPIResponse,
     retriveCoordinates: locateMe,
-    retriveCity: retriveCityResponse
+    retriveCity: retriveCityResponse,
+    getMyLatLng
 };

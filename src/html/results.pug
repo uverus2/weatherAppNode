@@ -1,11 +1,14 @@
 extends layout/main
 block content
-
+    p#lat.px-5.d-none #{lat}
+    p#lng.px-5.d-none #{lng}
+    p#latCurrent.px-5.d-none #{currentLat}
+    p#lngCurrent.px-5.d-none #{currentLng}
     p#townname.d-none #{townName}
     p#weather.d-none #{temp}
     p#desc.d-none #{weatherDesc}
     p#main.d-none #{main}
-    .container
+    .container#bodyResult
         .row
             .col-12.mx-auto.text-center.py-4
                 canvas#canvas
@@ -15,5 +18,14 @@ block content
                 h4 Location: #{townName}
                 h4 Weather: #{weatherDesc}
                 h4 Temperature: #{temp}
+    
+    .container  
+        .row
+            .col-12.py-3
+                h1 Location you Searched for
+                #map
+            .col-12.py-3
+                h1 Current Location
+                #map2
 
     

@@ -1,6 +1,10 @@
 // Canvas JS
 (() => {
     const canvas = document.querySelector("canvas");
+
+    if (!canvas) {
+        return
+    }
     canvas.width = 600;
     canvas.height = 200;
     stage = new createjs.Stage(canvas);
@@ -123,7 +127,7 @@
     function makeLines(n, strokeColor, fillColor) {
         lines = new Array(n);
 
-        for (var i = 0; i < n.length; ++i) {
+        for (let i = 0; i < n.length; ++i) {
             lines[i] = new Line(n[i][0], n[i][1], n[i][2], n[i][3], n[i][4], strokeColor, fillColor);
         }
 
@@ -140,16 +144,14 @@
 
     function handleTick() {
 
-
         lines.map(eachLine => {
-            console.log(eachLine.getStroke);
             if (eachLine.getStroke <= 18) {
                 eachLine.changeStroke = eachLine.getStroke + 0.5;
-                console.log(eachLine);
+
 
             } else if (eachLine.getStroke >= 18) {
                 eachLine.changeStroke = eachLine.getStroke - 5;
-                console.log(eachLine);
+
             }
             eachLine.createLine();
         });
@@ -173,9 +175,17 @@
         } else if (mainWeatherCondition === "Snow") {
             console.log("Snow");
         } else if (mainWeatherCondition === "Rain" || mainWeatherCondition === "Drizzle") {
-            console.log("Snow");
+            const cloud1 = new Cloud(2, 113);
+            cloud1.createCloud();
+            const cloud2 = new Cloud(100, 113);
+            cloud2.createCloud();
+
+
+            const rainDrop = new Line(50, 100, 100, 100, 3, "#000000", "#000000");
+            rainDrop.createLine()
+            console.log("Rain");
         } else if (mainWeatherCondition === "Thunderstorm") {
-            console.log("Snow");
+            console.log("Thunder");
         }
 
         const nameOfLocation = document.getElementById("townname").innerText;
@@ -196,5 +206,61 @@
         stage.removeAllChildren();
     }
 
+
+})();
+
+// CSS based Animations
+(() => {
+
+    const toAppearImage = document.querySelector(".image");
+    const toAppearText = document.querySelector(".text");
+
+    const appear = (element, classToAdd) => {
+
+        const pos = element.getBoundingClientRect().top
+        if (pos < window.innerHeight / 1.2) {
+            element.classList.add(`${classToAdd}`)
+        }
+
+    };
+
+    if (toAppearText) {
+        window.addEventListener("scroll", () => {
+            appear(toAppearImage, "appear");
+            appear(toAppearText, "appear");
+        });
+    }
+
+})();
+
+// Maping 
+(() => {
+
+    if (document.getElementById("bodyResult")) {
+
+        const getMap = (mapi, lat, lng) => {
+            let latLoc = Number(document.getElementById(lat).innerHTML);
+            let lngLoc = Number(document.getElementById(lng).innerHTML);
+
+            const map = L.map(mapi);
+            const attrib = "Map data copyright OpenStreetMap contributors, Open Database Licence";
+            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { attribution: attrib }).addTo(map);
+            map.setView([latLoc, lngLoc], 16);
+            document.getElementById(mapi).style.height = "500px";
+
+            const marker = L.marker([latLoc, lngLoc]).addTo(map);
+            const currentLocation = L.circle([latLoc, lngLoc], { radius: 100 }).addTo(map);
+            currentLocation.bindPopup("Your Locations");
+
+            currentLocation.on("click", e => {
+                alert(`Marker Placed at your Location which is Latitude ${e.latlng.lat} and Longitude ${e.latlng.lng}`);
+            });
+        }
+
+
+        getMap("map", "lat", "lng");
+        getMap("map2", "latCurrent", "lngCurrent");
+
+    }
 
 })();
