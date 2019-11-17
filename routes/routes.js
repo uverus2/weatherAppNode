@@ -40,13 +40,13 @@ router.get('/', async(req, res) => {
 
 router.post('/results', async(req, res) => {
     const storeFormData = await formData(req);
-
-
     const userTownCoordinates = await getMyLatLng(res, storeFormData);
     const userLatLng = userTownCoordinates.results[0].geometry.location;
     const userCoordinates = await retriveCoordinates(res).catch(err => { console.log(err) });
     const lat = userCoordinates.location.lat.toString();
     const lng = userCoordinates.location.lng.toString();
+
+    res.locals.path = req.path;
     await apiData(res, storeFormData).then(response => {
         res.render('results', {
             title: 'Results',
