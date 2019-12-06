@@ -1,3 +1,37 @@
+// Fetching Timezone
+(() => {
+    const timezone = (lat, long, element, boolean) => {
+
+        let latLoc = Number(document.getElementById(lat).innerHTML);
+        let lngLoc = Number(document.getElementById(long).innerHTML);
+        const timeZoneAPIurl = `https://maps.googleapis.com/maps/api/timezone/json?location=${latLoc},${lngLoc}&timestamp=1458000000&key=AIzaSyDwa03OBmRhfwY5ucT3MUOe8-uJ2HOb47Y`;
+
+        fetch(timeZoneAPIurl).then(response => response.json()).then(response => {
+
+            document.getElementById(`${element}`).innerHTML = `Local Timezone: ${response.timeZoneId}`;
+
+            if (boolean) {
+                const timeZone = document.getElementById("locationTimeZone").innerHTML.split(":")[1].trim();
+                const time = moment.tz(moment(), `${timeZone}`).format('HH:MM');
+                document.getElementById("time").innerHTML = time;
+            }
+
+
+        }).catch(err => {
+            console.log(err);
+        });
+
+
+    };
+
+    if (window.location.pathname === "/results") {
+        timezone("lat", "lng", "locationTimeZone", true);
+        timezone("latCurrent", "lngCurrent", "currentTimeZone", false);
+    }
+
+
+
+})();
 // Canvas JS
 (() => {
     const canvas = document.querySelector("canvas");
@@ -248,25 +282,50 @@
     let y = 150;
     let counter = 0;
 
+    const createMoon = () => {
+        const moon = new Circle(60, 95, 95, 8, "#C3C1A1", "#F4F1C9", stage);
+        moon.createCircle();
+    }
+
     function handleTick() {
 
-        lines.map(eachLine => {
-            if (eachLine.getStroke <= 18) {
-                eachLine.changeStroke = eachLine.getStroke + 0.5;
+        const timer = document.getElementById("time").innerHTML.split(":")[0];
+
+        const day = moment(Number(timer)).isBetween(06, 19); // true
+        const earlyMorning = moment(Number(timer)).isBetween(00, 05); // true
+        const evening = moment(Number(timer)).isBetween(20, 23); // true
 
 
-            } else if (eachLine.getStroke >= 18) {
-                eachLine.changeStroke = eachLine.getStroke - 5;
 
-            }
-            eachLine.createLine();
-        });
+        if (day) {
 
-        const sunSkyBackground = new Circle(70, 95, 95, 1, "#87ceeb", "#87ceeb", stage);
-        sunSkyBackground.createCircle();
+            lines.map(eachLine => {
+                if (eachLine.getStroke <= 18) {
+                    eachLine.changeStroke = eachLine.getStroke + 0.5;
 
-        const sun = new Circle(60, 95, 95, 8, "#F38235", "#f9d71c", stage);
-        sun.createCircle();
+                } else if (eachLine.getStroke >= 18) {
+                    eachLine.changeStroke = eachLine.getStroke - 5;
+
+                }
+                eachLine.createLine();
+            });
+
+            const sunSkyBackground = new Circle(70, 95, 95, 1, "#87ceeb", "#87ceeb", stage);
+            sunSkyBackground.createCircle();
+
+            const sun = new Circle(60, 95, 95, 8, "#F38235", "#f9d71c", stage);
+            sun.createCircle();
+
+        }
+        if (evening) {
+
+            createMoon();
+            canvas.style.backgroundColor = "#2e4482";
+        }
+        if (earlyMorning) {
+            createMoon();
+            canvas.style.backgroundColor = "#546bab";
+        }
 
         const coordinatesWeather = [
             [20, -5],
@@ -383,12 +442,7 @@
         stage.removeAllChildren();
     }
 
-
-
-
-
 })();
-
 
 
 // CSS based Animations
@@ -435,6 +489,7 @@
 
             const marker = L.marker([latLoc, lngLoc]).addTo(map);
 
+            // Apending Popups 
             const array = [
                 [50.761520, -1.622120, "Hordle"],
                 [50.759319, -1.670620, "New Milton"]

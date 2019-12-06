@@ -8,6 +8,7 @@ block content
     p#weather.d-none #{temp}
     p#desc.d-none #{weatherDesc}
     p#main.d-none #{main}
+    p#time.d-none
     .container#bodyResult
         .row
             .col-12.mx-auto.text-center.py-4
@@ -19,11 +20,15 @@ block content
                 h4 Weather: #{weatherDesc}
                 h4 Temperature: #{temp}
     
-    .container  
+    .container
         .row
+            .col-12.py-3
+                h4#locationTimeZone
             .col-12.py-3
                 h1 Location you Searched for
                 #map
+            .col-12.py-3
+                h4#currentTimeZone
             .col-12.py-3
                 h1 Current Location
                 #map2
